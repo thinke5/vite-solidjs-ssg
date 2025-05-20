@@ -1,0 +1,69 @@
+{
+  "name": "rspack-solid-ssg",
+  "type": "module",
+  "version": "1.0.0",
+  "private": true,
+  "description": "description",
+  "scripts": {
+    "dev:vite": "vite --mode rdm",
+    "build:vite": "vite build --app",
+    "dev:rdm": "rsbuild dev --env-mode rdm --open",
+    "dev:prod": "rsbuild dev --env-mode prod --open",
+    "build:rdm": "rsbuild build --env-mode rdm && node dist/server/ssg.cjs",
+    "build:prod": "rsbuild build --env-mode prod && node dist/server/ssg.cjs",
+    "check:ts": "tsc",
+    "build:test-rdm": "rsbuild build --env-mode rdm -w"
+  },
+  "dependencies": {
+    "@solidjs/meta": "^0.29.4",
+    "@solidjs/router": "^0.15.3",
+    "@tanstack/query-sync-storage-persister": "^5.76.1",
+    "@tanstack/solid-query": "^5.76.0",
+    "@tanstack/solid-query-persist-client": "^5.76.1",
+    "@thinke/toast": "^1.2.2",
+    "dayjs": "^1.11.13",
+    "echarts": "^5.6.0",
+    "js-base64": "^3.7.7",
+    "js-cookie": "^3.0.5",
+    "ky": "^1.8.1",
+    "lodash": "npm:lodash-es@^4.17.21",
+    "solid-js": "^1.9.7"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^4.13.1",
+    "@tanstack/solid-query-devtools": "^5.76.0",
+    "@thinke/fsrouter": "1.0.3",
+    "@thinke/unocss-wml-preset": "^2.0.7",
+    "@types/js-cookie": "^3.0.6",
+    "@types/lodash": "^4.17.16",
+    "@unocss/eslint-plugin": "^66.1.2",
+    "@vitejs/plugin-legacy": "^6.1.1",
+    "cross-env": "^7.0.3",
+    "eslint": "^9.27.0",
+    "eslint-plugin-format": "^1.0.1",
+    "less": "^4.3.0",
+    "rollup-plugin-visualizer": "^5.14.0",
+    "typescript": "^5.8.3",
+    "unocss": "^66.1.2",
+    "vite": "^6.3.5",
+    "vite-plugin-solid": "^2.11.6",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "pnpm": {
+    "overrides": {
+      "@jridgewell/gen-mapping": "latest",
+      "esbuild": "latest",
+      "unplugin": "latest"
+    },
+    "onlyBuiltDependencies": [
+      "core-js",
+      "esbuild",
+      "unrs-resolver"
+    ]
+  },
+  "browserslist": [
+    "android>=73",
+    "ios>=13.1",
+    "not ie>0"
+  ]
+}
