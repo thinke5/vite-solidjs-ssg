@@ -24,7 +24,7 @@ const basePath = `/h/${projectName}`
 
 export default defineConfig((_env) => {
   return ({
-    // base: basePath,
+    // base: basePath, // TODO:按需启用
     define: {
       'import.meta.env.PUBLIC_BUILD_TIME': JSON.stringify(dayjs().format('YYYY-MM-DD HH:mm:ss')),
       'import.meta.env.PUBLIC_BUILD_V': JSON.stringify(!isDEV ? `${build_version}-${ENV.BK_CI_BUILD_NO}` : '0.0.0-dev'),
@@ -43,9 +43,9 @@ export default defineConfig((_env) => {
       legacy({ modernPolyfills: true, renderLegacyChunks: false }),
       perEnvironmentPlugin('only-client', environment => environment.name === 'client' && [visualizer()]),
     ],
-    // resolve: {
-    //   noExternal: true,
-    // },
+    resolve: {
+      noExternal: true,
+    },
     environments: {
       client: {
         build: {
@@ -83,6 +83,9 @@ export default defineConfig((_env) => {
       },
     },
     server: {
+      open: true,
+      port: 25078,
+      // host: '0.0.0.0',
       proxy: {
         '/bing': {
           target: 'https://bing.com',

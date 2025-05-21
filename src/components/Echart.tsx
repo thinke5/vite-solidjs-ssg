@@ -30,11 +30,11 @@ export default function Echart(_props: {
   onMount(async () => {
     echarts = await import('~/lib/echarts')
     if (props.renderToSVGString) {
-      const { width, height } = $div.getBoundingClientRect()
+      const { width, height } = $div!.getBoundingClientRect()
       setMyChart(echarts.init(null, null, { renderer: 'svg', ssr: true, width, height }) as any)
     }
     else {
-      setMyChart(echarts.init($div, null, { renderer: 'svg' }) as any)
+      setMyChart(echarts.init($div!, null, { renderer: 'svg' }) as any)
     }
 
     setLoading(false)

@@ -2,13 +2,16 @@ import type { Input, Options } from 'ky'
 import { error as toastError } from '@thinke/toast'
 import ky, { HTTPError } from 'ky'
 import { BASEURL, isDEV, isRDM } from '../config'
-import { nextTick } from './index'
+import { sleep } from './index'
 
+/** 自定义的错误的错误码 */
 const myErrStatus = 499
+/** 是否打印请求日志 */
+const isShowLogger = isRDM && !isDEV // 测试环境 且 非开发环境
 
 /** 获取鉴权数据 */
 async function getAuthParam() {
-  await nextTick(100)
+  await sleep(100) // TODO: 根据实际情况调整
   const headerParam = {}
   let bodyParam = {
     openid: 'OPENID',
@@ -25,7 +28,7 @@ async function getAuthParam() {
   }
 }
 
-const defKY = ky.create({
+const myKyInstance = ky.create({
   prefixUrl: BASEURL,
   retry: { limit: 0 },
   // throwHttpErrors: true,
@@ -44,9 +47,9 @@ const defKY = ky.create({
       // 处理json
       if (options.method === 'POST' && options.json && options.json instanceof Object) {
         const body = { ...authParam.bodyParam, ...options.json }
-        if (isRDM && !isDEV) { // 测试环境 且 非开发环境
+        if (isShowLogger) {
           // eslint-disable-next-line no-console
-          console.log('start fetch =>', request.url, body)
+          console.log(`[start ${options.method} fetch] =>`, request.url, body)
         }
         return new Request(request, { body: JSON.stringify(body) })
       }
@@ -54,8 +57,15 @@ const defKY = ky.create({
       return request
     }],
     // 请求返回后
-    afterResponse: [async (_request, _options, response) => {
+    afterResponse: [async (request, options, response) => {
       // console.log('收到响应', { _request, _options, response })
+      if (isShowLogger) {
+        try {
+          // eslint-disable-next-line no-console
+          console.log(`[end ${options.method} fetch] =>`, request.url, await response.clone().json())
+        }
+        catch (e) { }
+      }
 
       if (response.status === 200 && (await response.clone().arrayBuffer()).byteLength > 0) {
         const resData = await response.clone().json()
@@ -153,13 +163,13 @@ interface MyOptions extends Options {
  */
 export function POST<T = any>(path: Input, data: ReqJson | FormData | URLSearchParams = {}, options?: MyOptions) {
   if (data instanceof FormData || data instanceof URLSearchParams)
-    return defKY.post<T>(path, { body: data, ...options })
+    return myKyInstance.post<T>(path, { body: data, ...options })
 
-  return defKY.post<T>(path, { json: data, ...options })
+  return myKyInstance.post<T>(path, { json: data, ...options })
 }
 /** 发起GET请求 */
 export function GET<T = any>(path: Input, data: ReqJson | URLSearchParams, options?: MyOptions) {
-  return defKY.get<T>(path, { searchParams: new URLSearchParams(data), ...options })
+  return myKyInstance.get<T>(path, { searchParams: new URLSearchParams(data), ...options })
 }
 
 interface ReqJson { [key: string | number]: any }

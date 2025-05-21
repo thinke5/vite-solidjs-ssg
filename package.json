@@ -1,18 +1,13 @@
 {
-  "name": "rspack-solid-ssg",
+  "name": "vite-solidjs-ssg",
   "type": "module",
   "version": "1.0.0",
   "private": true,
   "description": "description",
   "scripts": {
-    "dev:vite": "vite --mode rdm",
-    "build:vite": "vite build --app",
-    "dev:rdm": "rsbuild dev --env-mode rdm --open",
-    "dev:prod": "rsbuild dev --env-mode prod --open",
-    "build:rdm": "rsbuild build --env-mode rdm && node dist/server/ssg.cjs",
-    "build:prod": "rsbuild build --env-mode prod && node dist/server/ssg.cjs",
-    "check:ts": "tsc",
-    "build:test-rdm": "rsbuild build --env-mode rdm -w"
+    "dev:rdm": "vite --mode rdm ",
+    "build:rdm": "vite build --mode rdm",
+    "check:ts": "tsc"
   },
   "dependencies": {
     "@solidjs/meta": "^0.29.4",
@@ -21,18 +16,20 @@
     "@tanstack/solid-query": "^5.76.0",
     "@tanstack/solid-query-persist-client": "^5.76.1",
     "@thinke/toast": "^1.2.2",
+    "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "echarts": "^5.6.0",
     "js-base64": "^3.7.7",
     "js-cookie": "^3.0.5",
     "ky": "^1.8.1",
     "lodash": "npm:lodash-es@^4.17.21",
-    "solid-js": "^1.9.7"
+    "solid-js": "^1.9.7",
+    "tailwind-merge": "^3.3.0"
   },
   "devDependencies": {
     "@antfu/eslint-config": "^4.13.1",
     "@tanstack/solid-query-devtools": "^5.76.0",
-    "@thinke/fsrouter": "1.0.3",
+    "@thinke/fsrouter": "1.0.4",
     "@thinke/unocss-wml-preset": "^2.0.7",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.16",
@@ -43,6 +40,7 @@
     "eslint-plugin-format": "^1.0.1",
     "less": "^4.3.0",
     "rollup-plugin-visualizer": "^5.14.0",
+    "shadcn": "^2.5.0",
     "typescript": "^5.8.3",
     "unocss": "^66.1.2",
     "vite": "^6.3.5",
@@ -58,6 +56,7 @@
     "onlyBuiltDependencies": [
       "core-js",
       "esbuild",
+      "msw",
       "unrs-resolver"
     ]
   },
