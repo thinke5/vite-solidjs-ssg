@@ -6,7 +6,9 @@
   "description": "description",
   "scripts": {
     "dev:rdm": "vite --mode rdm ",
-    "build:rdm": "vite build --mode rdm",
+    "build:rdm": "vite build --mode rdm && npm run ssg",
+    "build:prod": "vite build --mode prod && npm run ssg",
+    "ssg": "node dist/server/ssg.js",
     "check:ts": "tsc"
   },
   "dependencies": {

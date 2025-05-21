@@ -1,29 +1,27 @@
 /* eslint-disable no-console */
 /* eslint-disable ts/ban-ts-comment */
 /* eslint-disable node/prefer-global/process */
-// @ts-ignore
 import fs from 'node:fs'
-// @ts-ignore
 import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { getAllPaths } from '@fsr/server'
 import { generateHydrationScript } from 'solid-js/web'
 import { RouteBasePah } from '~/config'
 import { render } from './index.server'
 
-// @ts-ignore
-const dirname: string = __dirname
+const __filename = fileURLToPath(import.meta.url)
+const dirname = path.dirname(__filename)
+
+const clientDirName = 'client'
 
 /** 渲染并保存到磁盘 */
 async function SSG() {
   // 已经渲染过的页面
   const randeredPage = new Map<string, string>()
-  const tmplentHTML: string = fs.readFileSync(path.join(dirname, '../web/index.html')).toString()
-  const saveDirPath = path.join(dirname, `../web/`)
+  const tmplentHTML: string = fs.readFileSync(path.join(dirname, `../${clientDirName}/index.html`)).toString()
+  const saveDirPath = path.join(dirname, `../${clientDirName}/`)
   // 清理文件
-  fs.rmSync(saveDirPath, {
-    recursive: true,
-    force: true,
-  })
+  // fs.rmSync(saveDirPath, { recursive: true, force: true, })
 
   for (const pagePath of getAllPaths()) {
     // 跳过动态的页面，比如 `/user/:id` 。。。 搞这个不如直接SSR

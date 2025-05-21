@@ -17,17 +17,23 @@ const isDEV = NODE_ENV === 'development'
 const isCI = Boolean(ENV.BK_CI_BUILD_NO)
 /** 构建版本号 */
 const build_version = isCI ? `${ENV.BK_CI_MAJOR_VERSION}.${ENV.BK_CI_MINOR_VERSION}.${ENV.BK_CI_FIX_VERSION}-${ENV.BK_CI_BUILD_NO}` : 'unknownVersion'
+/** js、css等资源存储的 CDN */
+const CDN_host = 'https://CDN.com' // TODO:使用实际域名
 /** 项目的名称，会影响path前缀 */
 const projectName = 'defaultProject' // TODO:使用实际项目
 /** path前缀 */
 const basePath = `/h/${projectName}`
 
-export default defineConfig((_env) => {
+export default defineConfig(({ command, mode }) => {
+  const CDN_path = `${CDN_host}/H5-${mode}/${projectName}/${build_version}`
+  const isBuild = command === 'build'
+
   return ({
-    // base: basePath, // TODO:按需启用
+    base: command === 'serve' ? basePath : CDN_path, // TODO:按需启用
     define: {
       'import.meta.env.PUBLIC_BUILD_TIME': JSON.stringify(dayjs().format('YYYY-MM-DD HH:mm:ss')),
       'import.meta.env.PUBLIC_BUILD_V': JSON.stringify(!isDEV ? `${build_version}-${ENV.BK_CI_BUILD_NO}` : '0.0.0-dev'),
+      'import.meta.env.PUBLIC_BASE_PATH': JSON.stringify(basePath),
     },
     clearScreen: false,
     appType: 'custom',
@@ -40,8 +46,10 @@ export default defineConfig((_env) => {
         entry: '/src/index.dev.ssr.tsx',
         preview: new URL('./dist/server/index.js', import.meta.url).toString(),
       }),
-      legacy({ modernPolyfills: true, renderLegacyChunks: false }),
-      perEnvironmentPlugin('only-client', environment => environment.name === 'client' && [visualizer()]),
+      isBuild && legacy({ modernPolyfills: true, renderLegacyChunks: false }),
+      perEnvironmentPlugin('only-client', environment => environment.name === 'client' && [
+        isBuild && visualizer(),
+      ]),
     ],
     resolve: {
       noExternal: true,
@@ -66,6 +74,7 @@ export default defineConfig((_env) => {
           rollupOptions: {
             input: {
               index: '/src/index.dev.ssr.tsx',
+              ssg: '/src/index.ssg.tsx',
             },
           },
         },
@@ -99,7 +108,7 @@ export default defineConfig((_env) => {
 
 // ------------------------------
 
-// vavite-style ssr middleware plugin
+/** vavite-style ssr middleware plugin */
 export function vitePluginSsrMiddleware({
   entry,
   preview,

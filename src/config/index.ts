@@ -9,4 +9,4 @@ export const BUILD_TIME = import.meta.env.PUBLIC_BUILD_TIME
 /** 版本号 */
 export const BUILD_V = import.meta.env.PUBLIC_BUILD_V
 /** 路由前缀 */
-export const RouteBasePah = import.meta.env.BASE_URL
+export const RouteBasePah = import.meta.env.PUBLIC_BASE_PATH
