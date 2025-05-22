@@ -18,6 +18,7 @@
     "@tanstack/solid-query": "^5.76.0",
     "@tanstack/solid-query-persist-client": "^5.76.1",
     "@thinke/toast": "^1.2.2",
+    "@unocss/reset": "^66.1.2",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.13",
     "echarts": "^5.6.0",
@@ -45,6 +46,7 @@
     "shadcn": "^2.5.0",
     "typescript": "^5.8.3",
     "unocss": "^66.1.2",
+    "unocss-preset-animations": "^1.2.1",
     "vite": "^6.3.5",
     "vite-plugin-solid": "^2.11.6",
     "vite-tsconfig-paths": "^5.1.4"

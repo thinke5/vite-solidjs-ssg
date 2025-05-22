@@ -39,7 +39,7 @@ export default defineConfig(({ command, mode }) => {
     appType: 'custom',
     plugins: [
       Unocss(),
-      FRTunplugin.vite(),
+      FRTunplugin.vite() as any,
       tsconfigPaths(),
       Solid({ ssr: true }),
       vitePluginSsrMiddleware({
