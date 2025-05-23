@@ -2,8 +2,8 @@ import { getAllPaths } from '@fsr/client'
 import { A, useNavigatePro } from '@fsr/router'
 import { createSignal, For, onMount, Show } from 'solid-js'
 
-/** demo页面 */
-export default function Demo() {
+/** index页面 */
+export default function () {
   const [ok, setOk] = createSignal(false)
   const navp = useNavigatePro()
   onMount(() => {

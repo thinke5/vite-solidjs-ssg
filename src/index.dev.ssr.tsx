@@ -1,15 +1,11 @@
 import type { Connect, ViteDevServer } from 'vite'
-import { getAllPaths } from '@fsr/server'
 import { generateHydrationScript } from 'solid-js/web'
 import { RouteBasePah } from './config'
 import { render } from './index.server'
 
 const handler: Connect.NextHandleFunction = async (req, res) => {
-  const path = req.url || '/'
-  const ssrHtml = await render((RouteBasePah !== '/' ? RouteBasePah : '') + path)
-  let html = await importHtml()
-  html = html.replace('<!--app-content-->', () => ssrHtml)
-    .replace('<!--app-head-->', () => generateHydrationScript())
+  const html = await renderFullHTML(req.url || '/')
+
   res.setHeader('content-type', 'text/html').end(html)
 }
 
@@ -26,4 +22,11 @@ async function importHtml() {
     const mod = await import('/dist/client/index.html?raw')
     return mod.default
   }
+}
+
+export async function renderFullHTML(path: string) {
+  const ssrHtml = await render((RouteBasePah !== '/' ? RouteBasePah : '') + path)
+  const html = await importHtml()
+  return html.replace('<!--app-content-->', () => ssrHtml) // 必须要用函数，否则 `$符`会丢失
+    .replace('<!--app-head-->', () => generateHydrationScript())
 }
