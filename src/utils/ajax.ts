@@ -42,7 +42,11 @@ const myKyInstance = ky.create({
         Object.entries(authParam.bodyParam).forEach(([key, value]) => {
           formData.append(key, value)
         })
-        return new Request(request, { body: formData })
+        // 删除header的旧字段，否则上传文件会报错
+        const headers = new Headers(request.headers)
+        headers.delete('content-type')
+        headers.delete('content-length')
+        return new Request(request.clone(), { body: formData, headers })
       }
       // 处理json
       if (options.method === 'POST' && options.json && options.json instanceof Object) {
