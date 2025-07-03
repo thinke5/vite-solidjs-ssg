@@ -1,0 +1,4 @@
+{
+  "example_message": "Hello world {{username}}",
+  "this-is-i18n": "This is I18n"
+}

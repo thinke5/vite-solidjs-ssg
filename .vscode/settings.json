@@ -36,6 +36,23 @@
   },
   "[javascriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
-  }
-
+  },
+  "i18n-ally.localesPaths": [
+    "src/locales/"
+  ],
+  "i18n-ally.sourceLanguage": "zh",
+  "i18n-ally.displayLanguage": "zh",
+  "i18n-ally.keystyle": "nested",
+  "i18n-ally.editor.preferEditor": true,
+  "i18n-ally.dirStructure": "dir",
+  "i18n-ally.enabledFrameworks": [
+    "i18next",
+    "react-i18next",
+    "react"
+  ],
+  "i18n-ally.namespace": true,
+  "i18n-ally.defaultNamespace": "base",
+  "i18n-ally.extract.keygenStrategy": "slug",
+  "i18n-ally.extract.keyMaxLength": 24,
+  "i18n-ally.extract.keygenStyle": "default"
 }

@@ -1,12 +1,12 @@
 import { MetaProvider, Title } from '@solidjs/meta'
 import { Router } from '@solidjs/router'
-import { ErrorBoundary, Suspense } from 'solid-js'
+import { ErrorBoundary, Suspense, useTransition } from 'solid-js'
 import { isServer } from 'solid-js/web'
 // import { KeepAliveProvider } from '~/lib/keepAlive' // TODO 按需启用
 import { BUILD_TIME, BUILD_V, isDEV, isRDM, RouteBasePah } from './config'
 import SolidQuery from './lib/solid-query'
-import { init } from './lib/TAM'
 
+import { init } from './lib/TAM'
 // import '@unocss/reset/tailwind.css' // TODO 按需启用
 import 'uno.css'
 import './App.less'
@@ -25,8 +25,17 @@ if (!isServer) {
 const showError = isDEV || isRDM
 /** mian */
 export default function App(props: { url?: string, routers: any[] }) {
+  const Loading = () => (
+    <div class="min-h-68 w-full f-c/c">
+      <div class="mr-1 s-3 animate-spin rd bg-cyan"></div>
+      loading...
+    </div>
+  )
   return (
     <ErrorBoundary fallback={(err: Error) => {
+      if (err.message.startsWith('Hydration Mismatch.')) { // 水合失败，抛出错误，直接在客户端重新进行渲染
+        throw err
+      }
       showError && console.error(err)
       if (isServer) {
         throw err
@@ -48,32 +57,31 @@ export default function App(props: { url?: string, routers: any[] }) {
       )
     }}
     >
-      <SolidQuery>
-        {/* <KeepAliveProvider> */}
-        <MetaProvider>
-          <Title>VITE + Solid + SSG</Title>
-          <Router
-            base={RouteBasePah}
-            url={props.url}
-            root={props => (
-              <div class="root-content">
-                <Suspense fallback={(
-                  <div class="min-h-68 w-full f-c/c">
-                    <div class="mr-1 s-3 animate-spin rd bg-cyan"></div>
-                    loading...
-                  </div>
-                )}
-                >
-                  {props.children}
-                </Suspense>
-              </div>
-            )}
-          >
-            {props.routers}
-          </Router>
-        </MetaProvider>
-        {/* </KeepAliveProvider> */}
-      </SolidQuery>
+
+      <Suspense fallback={(<Loading />)}>
+
+        <SolidQuery>
+          {/* <KeepAliveProvider> */}
+          <MetaProvider>
+            <Title>VITE + Solid + SSG</Title>
+            <Router
+              base={RouteBasePah}
+              url={props.url}
+              root={props => (
+                <div class="root-content">
+                  <Suspense fallback={(<Loading />)}>
+                    {props.children}
+                  </Suspense>
+                </div>
+              )}
+            >
+              {props.routers}
+            </Router>
+          </MetaProvider>
+          {/* </KeepAliveProvider> */}
+        </SolidQuery>
+
+      </Suspense>
     </ErrorBoundary>
   )
 };

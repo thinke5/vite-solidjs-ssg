@@ -18,6 +18,7 @@ const config = antfu({
     'style/jsx-one-expression-per-line': [0, { allow: 'non-jsx' }],
     'unicorn/consistent-function-scoping': 'off',
     '@typescript-eslint/consistent-type-definitions': 'off', // 允许 混用interface或type 定义类型
+    'antfu/top-level-function': 'off',
   },
 })
 

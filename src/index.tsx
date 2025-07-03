@@ -1,9 +1,13 @@
 import fsRouteList from '@fsr/client'
 import { hydrate, render } from 'solid-js/web'
-import App from './App';
+import App from './App'
+import { initI18next } from './lib/i18n';
 
 (async () => {
-  const routers = await fsRouteList()
+  const [routers] = await Promise.all([
+    fsRouteList(), //
+    initI18next(), // 多语言的初始化
+  ])
 
   try {
     hydrate(() => <App routers={routers} />, document.getElementById('root')!)

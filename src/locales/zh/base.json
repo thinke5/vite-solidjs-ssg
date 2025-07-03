@@ -1,0 +1,4 @@
+{
+  "example_message": "你好 {{username}}",
+  "this-is-i18n": "这里是i18n页面"
+}
