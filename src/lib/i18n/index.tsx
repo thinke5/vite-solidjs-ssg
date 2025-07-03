@@ -1,6 +1,8 @@
 import { createInstance } from 'i18next'
 import resourcesToBackend from 'i18next-resources-to-backend'
+import Cookie from 'js-cookie'
 import { createRoot, createSignal, startTransition } from 'solid-js'
+import { isServer } from 'solid-js/web'
 
 const allLangJson = import.meta.glob('../../locales/**/*.json', { import: 'default' }) // 自动导入，文档： https://cn.vite.dev/guide/features.html#glob-import
 
@@ -18,15 +20,16 @@ const { lang, setLang } = createRoot(() => {
 
 let isInit = false
 /** 初始化i18next */
-export async function initI18next(_newLang?: string) {
-  const newLang = _newLang || fallbackLng
+export async function initI18next() {
+  const cookieLang = isServer ? null : Cookie.get('lang') // 获取cookie中的语言
+  const newLang = cookieLang || fallbackLng
   if (!isInit) {
     isInit = true
     await i18next
       .use(resourcesToBackend(async (language: string, namespace: string) => {
         const path = `../../locales/${language}/${namespace}.json`
         // console.log('[ resourcesToBackend ]-->', path)
-        return (await (allLangJson[path]()))
+        return (await (allLangJson[path]?.()))
       }))
       .init({
         // debug: true,

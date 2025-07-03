@@ -10,6 +10,7 @@ export default function I18n() {
       <div class="f-c/c gap-3 py-3">
         <button onClick={() => changeLanguage('en')}>English</button>
         <button onClick={() => changeLanguage('zh')}>中文</button>
+        <button onClick={() => changeLanguage('de')}>德语</button>
       </div>
       <p>{t('this-is-i18n')};{t('example_message', { username: '名字1' })}</p>
       <p>{t('other:other')}</p>
