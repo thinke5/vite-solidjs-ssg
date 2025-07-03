@@ -18,7 +18,8 @@ const { lang, setLang } = createRoot(() => {
 
 let isInit = false
 /** 初始化i18next */
-export async function initI18next(newLang: string = fallbackLng) {
+export async function initI18next(_newLang?: string) {
+  const newLang = _newLang || fallbackLng
   if (!isInit) {
     isInit = true
     await i18next
