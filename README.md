@@ -1,5 +1,10 @@
 > 前端模版，**并非ssr模版**
 
+注意点
+
+1. 默认开启了`i18n`，不需要可以在`index.tsx`和`index.server.tsx` 里删除init
+2. 注意修改CDN配置
+
 ## Usage
 
 ```bash
