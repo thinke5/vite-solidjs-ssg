@@ -1,7 +1,7 @@
 import antfu from '@antfu/eslint-config'
 
 const config = antfu({
-  solid: !true,
+  // solid: !true,
   typescript: true,
   unocss: true,
   yaml: false,
@@ -19,6 +19,7 @@ const config = antfu({
     'unicorn/consistent-function-scoping': 'off',
     '@typescript-eslint/consistent-type-definitions': 'off', // 允许 混用interface或type 定义类型
     'antfu/top-level-function': 'off',
+    'eslint-comments/no-unlimited-disable': 'off', // 允许文件禁用eslint
   },
 })
 

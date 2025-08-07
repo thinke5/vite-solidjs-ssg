@@ -1,11 +1,16 @@
 /* eslint-disable no-console */
 /* eslint-disable ts/ban-ts-comment */
-/* eslint-disable node/prefer-global/process */
-import fs from 'node:fs'
+
+// @ts-expect-error
+import fs from 'node:fs/promises'
+// @ts-expect-error
 import path from 'node:path'
+// @ts-ignore
+import process from 'node:process'
+// @ts-expect-error
 import { fileURLToPath } from 'node:url'
-import { getAllPaths } from '@fsr/server'
-import { renderFullHTML } from './index.dev.ssr'
+import { renderFullHTML } from './index.server'
+import { getAllPath } from './utils/getAllPath'
 
 const __filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(__filename)
@@ -21,27 +26,30 @@ async function SSG() {
   const saveDirPath = path.join(dirname, `../${clientDirName}/`)
   // 清理文件
   // fs.rmSync(saveDirPath, { recursive: true, force: true, })
+  const paths = getAllPath().concat(otherPaths)
 
-  for (const pagePath of getAllPaths().concat(otherPaths)) {
+  for (const pagePath of paths) {
     // 跳过动态的页面，比如 `/user/:id` 。。。 搞这个不如直接SSR
     if (pagePath.includes('*') || pagePath.includes(':')) {
       continue
     }
-
+    console.log(`rendering ${pagePath}`)
+    await new Promise(resolve => setTimeout(resolve, 100)) // 等待100ms,否则有可能会报错，原因未知
     const html = await renderFullHTML(pagePath)
 
     // 保存到磁盘
-    const fileName = pagePath.endsWith('/') ? `${pagePath}index` : `${pagePath}/index`
+    const onlyPath = new URL(pagePath, 'http://a.com').pathname
+    const fileName = onlyPath.endsWith('/') ? `${onlyPath}index` : `${onlyPath}/index`
     const pageDir = path.join(saveDirPath, `${fileName}.html`)
-    fs.mkdirSync(path.dirname(pageDir), { recursive: true })
-    fs.writeFileSync(pageDir, html)
+    await fs.mkdir(path.dirname(pageDir), { recursive: true })
+    await fs.writeFile(pageDir, html)
 
     // 记录映射
     randeredPage.set(pagePath, pageDir)
   }
   console.table(randeredPage)
   console.log('✅ SSG done')
-  // @ts-ignore
+
   process.exit(0)
 }
 

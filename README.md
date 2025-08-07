@@ -2,8 +2,9 @@
 
 注意点
 
-1. 默认开启了`i18n`，不需要可以在`index.tsx`和`index.server.tsx` 里删除init
+1. 默认禁用了`i18n`，需要可以在`src/router.tsx`里开启
 2. 注意修改CDN配置
+3. 路径如果搜索参数是必须的，那么SSG时应该配置合适的值
 
 ## Usage
 
@@ -25,11 +26,11 @@ npm run build:rdm
 
 ## 文件路由
 
-模版采用文件路由，根据`src/pages`文件夹自动生成路由
+模版采用文件路由，根据`src/routes`文件夹自动生成路由
 
 ## Libs
 
-- solid
-- solid-router
-- ky
+- solid-js
+- @tanstack/solid-router
 - @tanstack/solid-query
+- ky

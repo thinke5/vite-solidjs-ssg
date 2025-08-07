@@ -1,8 +1,7 @@
 import { changeLanguage, lang, t } from '~/lib/i18n'
-import { Counter } from '.'
 
-/**  */
-export default function I18n() {
+/** i18n的使用示例 */
+function RouteComponent() {
   return (
     <div>
       <div class="mr-1 s-3 animate-spin rd bg-cyan"></div>
@@ -14,9 +13,9 @@ export default function I18n() {
       </div>
       <p>{t('this-is-i18n')};{t('example_message', { username: '名字1' })}</p>
       <p>{t('other:other')}</p>
-      <Counter />
+
       <hr />
 
     </div>
   )
-};
+}

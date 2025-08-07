@@ -1,21 +1,16 @@
-import fsRouteList from '@fsr/client'
+import { RouterClient } from '@tanstack/solid-router/ssr/client'
 import { hydrate, render } from 'solid-js/web'
-import App from './App'
-import { initI18next } from './lib/i18n';
+import { APP, AppInitFn, router } from './router'
 
 (async () => {
-  const [routers] = await Promise.all([
-    fsRouteList(), //
-    initI18next(), // 多语言的初始化
-  ])
+  await AppInitFn()
+  const Client = () => (<APP><RouterClient router={router} /></APP>)
 
   try {
-    hydrate(() => <App routers={routers} />, document.getElementById('root')!)
+    hydrate(Client, document.getElementById('root')!)
   }
-  catch (error) {
-    console.error(error)
-    // eslint-disable-next-line no-console
-    console.log('Hydration failed, falling back to client-side rendering.')
-    render(() => <App routers={routers} />, document.getElementById('root')!)
+  catch (e) {
+    console.error('hydrate error', e)
+    render(Client, document.getElementById('root')!)
   }
 })()

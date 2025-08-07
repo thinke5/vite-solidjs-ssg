@@ -1,5 +1,6 @@
+/* eslint-disable ts/ban-ts-comment */
 import type { Connect, Plugin, PluginOption } from 'vite'
-import { FRTunplugin } from '@thinke/fsrouter'
+import { tanstackRouter } from '@tanstack/router-plugin/vite'
 import legacy from '@vitejs/plugin-legacy'
 import dayjs from 'dayjs'
 import { visualizer } from 'rollup-plugin-visualizer'
@@ -18,7 +19,7 @@ const isCI = Boolean(ENV.BK_CI_BUILD_NO)
 /** 构建版本号 */
 const build_version = isCI ? `${ENV.BK_CI_MAJOR_VERSION}.${ENV.BK_CI_MINOR_VERSION}.${ENV.BK_CI_FIX_VERSION}-${ENV.BK_CI_BUILD_NO}` : 'unknownVersion'
 /** js、css等资源存储的 CDN */
-const CDN_host = 'https://CDN.com' // TODO:使用实际域名
+const CDN_host = 'https://cdn.cdn' // TODO:使用实际域名
 /** 项目的名称，会影响path前缀 */
 const projectName = 'defaultProject' // TODO:使用实际项目
 /** path前缀 */
@@ -39,11 +40,12 @@ export default defineConfig(({ command, mode }) => {
     appType: 'custom',
     plugins: [
       Unocss(),
-      FRTunplugin.vite() as any,
+      tanstackRouter({ target: 'solid', autoCodeSplitting: true }),
       tsconfigPaths(),
       Solid({ ssr: true }),
       vitePluginSsrMiddleware({
         entry: '/src/index.dev.ssr.tsx',
+        // @ts-expect-error
         preview: new URL('./dist/server/index.js', import.meta.url).toString(),
       }),
       isBuild && legacy({ modernPolyfills: true, renderLegacyChunks: false }),
@@ -51,9 +53,9 @@ export default defineConfig(({ command, mode }) => {
         isBuild && visualizer(),
       ]),
     ],
-    resolve: {
-      noExternal: true,
-    },
+    // resolve: {
+    //   noExternal: true,
+    // },
     environments: {
       client: {
         build: {
@@ -65,19 +67,21 @@ export default defineConfig(({ command, mode }) => {
       },
       ssr: {
         optimizeDeps: {
-          noDiscovery: false,
+          exclude: ['@tanstack/*'],
         },
         build: {
-          sourcemap: true,
+          // sourcemap: true,
           outDir: 'dist/server',
           ssr: true,
           rollupOptions: {
             input: {
               index: '/src/index.dev.ssr.tsx',
               ssg: '/src/index.ssg.tsx',
+              ssp: '/src/index.p.tsx',
             },
           },
         },
+
       },
     },
     css: {
