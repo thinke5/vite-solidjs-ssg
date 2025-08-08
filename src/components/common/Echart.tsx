@@ -1,4 +1,4 @@
-import type { EChartsType, ECOption } from '~/lib/echarts'
+import type { EChartsType, ECOption } from '~/lib/common/echarts'
 import { createEffect, createMemo, createSignal, mergeProps, onCleanup, onMount, Show } from 'solid-js'
 
 /**
@@ -28,7 +28,7 @@ export default function Echart(_props: {
   const notOption = () => !loading() && (!props.hasData || !option())
 
   onMount(async () => {
-    echarts = await import('~/lib/echarts')
+    echarts = await import('~/lib/common/echarts')
     if (props.renderToSVGString) {
       const { width, height } = $div!.getBoundingClientRect()
       setMyChart(echarts.init(null, null, { renderer: 'svg', ssr: true, width, height }) as any)

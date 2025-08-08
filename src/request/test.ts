@@ -1,13 +1,12 @@
+import { queryOptions } from '@tanstack/solid-query'
 import { GET } from '../utils/ajax'
 
 /** bing 每日壁纸 */
 export function bingBgByGet(idx = 0) {
-  return GET('HPImageArchive.aspx', {
-    format: 'js',
-    idx,
-    n: 1,
-    mkt: 'zh-CN',
-  }).json<BingRsq>()
+  return queryOptions({
+    queryKey: ['bingBg', idx],
+    queryFn: () => GET('HPImageArchive.aspx', { format: 'js', idx, n: 1, mkt: 'zh-CN' }).json<BingRsq>(),
+  })
 }
 
 export interface BingRsq {

@@ -9,14 +9,14 @@ export const Route = createFileRoute('/demo/api')({
   validateSearch: z.object({
     idx: z.number().catch(0),
   }),
+  loader: ({ context: { queryClient } }) => {
+    queryClient.ensureQueryData(bingBgByGet(0))
+  },
 })
 
 function RouteComponent() {
   const sp = Route.useSearch()
-  const query = useQuery(() => ({
-    queryKey: ['bingBgByGet', sp().idx],
-    queryFn: () => bingBgByGet(Number(sp().idx) || 0),
-  }))
+  const query = useQuery(() => bingBgByGet(sp().idx))
 
   return (
     <div class="f-c/s flex-col gap-2 py-3">

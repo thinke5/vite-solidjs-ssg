@@ -1,7 +1,7 @@
 import type { QueryClient } from '@tanstack/solid-query'
 import { createRootRouteWithContext, HeadContent, Outlet } from '@tanstack/solid-router'
-import ErrorComponent from '~/components/ErrorComponent'
-import NotFound from '~/components/NotFound'
+import ErrorComponent from '~/components/common/ErrorComponent'
+import NotFound from '~/components/common/NotFound'
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   component: RootComponent,

@@ -12,7 +12,6 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as DemoIndexRouteImport } from './routes/demo/index'
 import { Route as DemoApiRouteImport } from './routes/demo/api'
-import { Route as DemoBingImgRouteImport } from './routes/demo/bing/img'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -29,44 +28,35 @@ const DemoApiRoute = DemoApiRouteImport.update({
   path: '/demo/api',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoBingImgRoute = DemoBingImgRouteImport.update({
-  id: '/demo/bing/img',
-  path: '/demo/bing/img',
-  getParentRoute: () => rootRouteImport,
-} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/demo/api': typeof DemoApiRoute
   '/demo': typeof DemoIndexRoute
-  '/demo/bing/img': typeof DemoBingImgRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/demo/api': typeof DemoApiRoute
   '/demo': typeof DemoIndexRoute
-  '/demo/bing/img': typeof DemoBingImgRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/demo/api': typeof DemoApiRoute
   '/demo/': typeof DemoIndexRoute
-  '/demo/bing/img': typeof DemoBingImgRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/demo/api' | '/demo' | '/demo/bing/img'
+  fullPaths: '/' | '/demo/api' | '/demo'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/demo/api' | '/demo' | '/demo/bing/img'
-  id: '__root__' | '/' | '/demo/api' | '/demo/' | '/demo/bing/img'
+  to: '/' | '/demo/api' | '/demo'
+  id: '__root__' | '/' | '/demo/api' | '/demo/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DemoApiRoute: typeof DemoApiRoute
   DemoIndexRoute: typeof DemoIndexRoute
-  DemoBingImgRoute: typeof DemoBingImgRoute
 }
 
 declare module '@tanstack/solid-router' {
@@ -92,13 +82,6 @@ declare module '@tanstack/solid-router' {
       preLoaderRoute: typeof DemoApiRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo/bing/img': {
-      id: '/demo/bing/img'
-      path: '/demo/bing/img'
-      fullPath: '/demo/bing/img'
-      preLoaderRoute: typeof DemoBingImgRouteImport
-      parentRoute: typeof rootRouteImport
-    }
   }
 }
 
@@ -106,7 +89,6 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DemoApiRoute: DemoApiRoute,
   DemoIndexRoute: DemoIndexRoute,
-  DemoBingImgRoute: DemoBingImgRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

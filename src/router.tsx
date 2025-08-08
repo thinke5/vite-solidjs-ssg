@@ -3,6 +3,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/solid-query'
 import { createRouter } from '@tanstack/solid-router'
 import { isServer } from 'solid-js/web'
 import { BUILD_TIME, BUILD_V, RouteBasePah } from './config'
+import { VConsole } from './lib/common/VConsole'
 import { routeTree } from './routeTree.gen'
 
 // import '@unocss/reset/tailwind.css' // TODO 按需启用
@@ -10,7 +11,12 @@ import 'uno.css'
 import './index.less'
 // import './index.css' // TODO 按需启用
 
-export const queryClient = new QueryClient()
+export const queryClient = new QueryClient({ defaultOptions: {
+  queries: {
+    // gcTime: 3600_000 * 24, // 24 hours
+    retry: 0,
+  },
+} })
 
 // Set up a Router instance
 export const router = createRouter({
@@ -54,5 +60,6 @@ export async function AppInitFn() {
   }
   await Promise.all([
     // initI18next(),
+    VConsole(),
   ])
 }
