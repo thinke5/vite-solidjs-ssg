@@ -54,5 +54,15 @@
   "i18n-ally.defaultNamespace": "base",
   "i18n-ally.extract.keygenStrategy": "slug",
   "i18n-ally.extract.keyMaxLength": 24,
-  "i18n-ally.extract.keygenStyle": "default"
+  "i18n-ally.extract.keygenStyle": "default",
+
+  "files.readonlyInclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "files.watcherExclude": {
+    "**/routeTree.gen.ts": true
+  },
+  "search.exclude": {
+    "**/routeTree.gen.ts": true
+  }
 }

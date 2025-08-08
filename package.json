@@ -5,9 +5,10 @@
   "private": true,
   "description": "description",
   "scripts": {
-    "dev:rdm": "vite --mode rdm ",
+    "dev:rdm": "vite --mode rdm",
     "build:rdm": "vite build --mode rdm && npm run ssg",
     "build:prod": "vite build --mode prod && npm run ssg",
+    "dev:prod": "vite --mode prod",
     "ssg": "node dist/server/ssg.js",
     "check:ts": "tsc"
   },
@@ -33,13 +34,13 @@
   },
   "devDependencies": {
     "@antfu/eslint-config": "^5.2.0",
-    "@tanstack/router-plugin": "^1.130.15",
+    "@tanstack/router-plugin": "^1.130.16",
     "@tanstack/solid-query-devtools": "^5.84.0",
     "@thinke/unocss-wml-preset": "^2.0.7",
     "@types/js-cookie": "^3.0.6",
     "@types/lodash": "^4.17.20",
     "@unocss/eslint-plugin": "^66.4.1",
-    "@vitejs/plugin-legacy": "^7.1.0",
+    "@vitejs/plugin-legacy": "^7.2.1",
     "cross-env": "^7.0.3",
     "eslint": "^9.32.0",
     "eslint-plugin-format": "^1.0.1",
@@ -49,7 +50,7 @@
     "typescript": "^5.9.2",
     "unocss": "^66.4.1",
     "unocss-preset-animations": "^1.2.1",
-    "vite": "^7.0.6",
+    "vite": "^7.1.1",
     "vite-plugin-solid": "^2.11.8",
     "vite-tsconfig-paths": "^5.1.4"
   },
