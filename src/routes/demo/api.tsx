@@ -9,8 +9,9 @@ export const Route = createFileRoute('/demo/api')({
   validateSearch: z.object({
     idx: z.number().catch(0),
   }),
-  loader: ({ context: { queryClient } }) => {
-    queryClient.ensureQueryData(bingBgByGet(0))
+  loaderDeps: ({ search: { idx } }) => ({ idx }),
+  loader: ({ context: { queryClient }, deps }) => {
+    queryClient.ensureQueryData(bingBgByGet(deps.idx))
   },
 })
 
