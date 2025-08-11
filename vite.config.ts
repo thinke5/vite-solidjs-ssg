@@ -77,7 +77,6 @@ export default defineConfig(({ command, mode }) => {
             input: {
               index: '/src/index.dev.ssr.tsx',
               ssg: '/src/index.ssg.tsx',
-              ssp: '/src/index.p.tsx',
             },
           },
         },
