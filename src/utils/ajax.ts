@@ -1,4 +1,5 @@
 import type { Input, Options } from 'ky'
+import { isServer } from '@tanstack/solid-query'
 import { error as toastError } from '@thinke/toast'
 import ky, { HTTPError } from 'ky'
 import { BASEURL, isDEV, isRDM } from '../config'
@@ -34,32 +35,42 @@ const myKyInstance = ky.create({
   // throwHttpErrors: true,
   hooks: {
     // 请求发出前
-    beforeRequest: [async (request, options: Options) => {
-      const authParam = await getAuthParam()
-      // 处理表单提交时，自动添加鉴权参数
-      if (options.method === 'POST' && options.body instanceof FormData) {
-        const formData = options.body!
-        Object.entries(authParam.bodyParam).forEach(([key, value]) => {
-          formData.append(key, value)
-        })
-        // 删除header的旧字段，否则上传文件会报错
-        const headers = new Headers(request.headers)
-        headers.delete('content-type')
-        headers.delete('content-length')
-        return new Request(request.clone(), { body: formData, headers })
-      }
-      // 处理json
-      if (options.method === 'POST' && options.json && options.json instanceof Object) {
-        const body = { ...authParam.bodyParam, ...options.json }
-        if (isShowLogger) {
-          // eslint-disable-next-line no-console
-          console.log(`[start ${options.method} fetch] =>`, request.url, body)
+    beforeRequest: [
+      async (request) => {
+        // ! 服务端目前只有SSG，不需要请求,后面有需要再根据ssg标识位判断
+        if (isServer) {
+          await sleep(100)
+          return new Response(null)
         }
-        return new Request(request, { body: JSON.stringify(body) })
-      }
-      // 其他情况直接返回原始的request
-      return request
-    }],
+        return request
+      },
+      async (request, options: Options) => {
+        const authParam = await getAuthParam()
+        // 处理表单提交时，自动添加鉴权参数
+        if (options.method === 'POST' && options.body instanceof FormData) {
+          const formData = options.body!
+          Object.entries(authParam.bodyParam).forEach(([key, value]) => {
+            formData.append(key, value)
+          })
+          // 删除header的旧字段，否则上传文件会报错
+          const headers = new Headers(request.headers)
+          headers.delete('content-type')
+          headers.delete('content-length')
+          return new Request(request.clone(), { body: formData, headers })
+        }
+        // 处理json
+        if (options.method === 'POST' && options.json && options.json instanceof Object) {
+          const body = { ...authParam.bodyParam, ...options.json }
+          if (isShowLogger) {
+          // eslint-disable-next-line no-console
+            console.log(`[start ${options.method} fetch] =>`, request.url, body)
+          }
+          return new Request(request, { body: JSON.stringify(body) })
+        }
+        // 其他情况直接返回原始的request
+        return request
+      },
+    ],
     // 请求返回后
     afterResponse: [async (request, options, response) => {
       // console.log('收到响应', { _request, _options, response })
