@@ -1,12 +1,13 @@
 // import { getAuthParamWithCache } from '@tencent/tmga-h5-sdk'
 import { isServer } from 'solid-js/web'
+import { isDEV } from '~/config'
 
 // 监控上报
 let aegis: any = (globalThis as any).$$tam_aegis
 
 /** 等待`aegis`加载完成 */
 function waitAegis() {
-  if (isServer) {
+  if (isServer || isDEV) {
     return false
   }
   if (aegis) {
@@ -49,6 +50,9 @@ export async function reportEvent(name: string, ext1?: string | Record<string, a
 }
 /** 初始化 */
 export async function init() {
+  if (isServer || isDEV) {
+    return false
+  }
   // aegis = new window.Aegis({
   //   id: 'pGUVFTCZyewhxxxxxx',
   //   reportApiSpeed: true,

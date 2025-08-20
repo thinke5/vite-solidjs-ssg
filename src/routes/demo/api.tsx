@@ -5,6 +5,11 @@ import * as z from 'zod/v4'
 import { bingBgByGet } from '~/request/test'
 
 export const Route = createFileRoute('/demo/api')({
+  head: () => ({
+    meta: [
+      { title: 'API Demo' },
+    ],
+  }),
   component: RouteComponent,
   validateSearch: z.object({
     idx: z.number().catch(0),
